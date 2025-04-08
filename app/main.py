@@ -49,7 +49,7 @@ async def main() -> None:
             else:
                 logger.warning(f"{server['id']} 未设置 cron")
             after_time = server.get("after_time")
-            if after_time > 0:
+            if after_time is not None and after_time > 0:
                 run_time = datetime.now() + timedelta(seconds=after_time)
                 scheduler.add_job(
                     Alist2Strm(**server).run, 'date', run_date=run_time
@@ -70,7 +70,7 @@ async def main() -> None:
             else:
                 logger.warning(f"{server['id']} 未设置 cron")
         after_time = server.get("after_time")
-        if after_time > 0:
+        if after_time is not None and after_time > 0:
             run_time = datetime.now() + timedelta(seconds=after_time)
             scheduler.add_job(
                 Ani2Alist(**server).run, 'date', run_date=run_time

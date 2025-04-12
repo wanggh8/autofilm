@@ -97,6 +97,7 @@ if __name__ == "__main__":
             "content": [
                 {
                     "name": "Alist V3.md",
+                    "path": "test/Alist V3.md",
                     "size": 1592,
                     "is_dir": False,
                     "modified": "2024-05-17T13:47:55.4174917+08:00",
@@ -120,6 +121,6 @@ if __name__ == "__main__":
             server_url="https://alist.nn.ci",
             base_path="/",
             path="/",
-            **item,
+            **{k: v for k, v in item.items() if k != "path"},
         )
         print(path)

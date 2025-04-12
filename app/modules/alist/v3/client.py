@@ -213,15 +213,16 @@ class AlistClient(metaclass=Multiton):
 
         if result["data"]["total"] == 0:
             return []
-        return [
+        array = [
             AlistPath(
                 server_url=self.url,
                 base_path=self.base_path,
                 path=dir_path + "/" + alist_path["name"],
-                **alist_path,
+                **{k: v for k, v in alist_path.items() if k != "path"},
             )
             for alist_path in result["data"]["content"]
         ]
+        return array
 
     async def async_api_fs_get(self, path: str) -> AlistPath:
         """
@@ -252,11 +253,12 @@ class AlistClient(metaclass=Multiton):
             )
 
         logger.debug(f"获取路径 {path} 详细信息成功")
+        data = result["data"]
         return AlistPath(
             server_url=self.url,
             base_path=self.base_path,
             path=path,
-            **result["data"],
+            **{k: v for k, v in data.items() if k != "path"}
         )
 
     async def async_api_admin_storage_list(self) -> list[AlistStorage]:
@@ -374,7 +376,7 @@ class AlistClient(metaclass=Multiton):
 
         for path in await self.async_api_fs_list(dir_path):
             if path.is_dir:
-                await sleep(wait_time)
+                yield await sleep(wait_time)
                 async for child_path in self.iter_path(
                     dir_path=path.path,
                     wait_time=wait_time,

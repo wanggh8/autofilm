@@ -165,6 +165,10 @@ class Alist2Strm:
 
         :param path: AlistPath 对象
         """
+
+        if path is None:
+            return None
+
         local_path = self.__get_local_path(path)
 
         if self.mode == "AlistURL":
